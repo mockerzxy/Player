@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">棉花糖</string>
+    <string name="localMusic">本地音乐</string>
+    <string name="singleMusic">单曲</string>
+    <string name="singer">歌手</string>
+    <string name="album">专辑</string>
+</resources>

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Player</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="localMusic">本地音乐</string>
+    <string name="singleMusic">单曲</string>
+    <string name="singer">歌手</string>
+    <string name="album">专辑</string>
+</resources>
