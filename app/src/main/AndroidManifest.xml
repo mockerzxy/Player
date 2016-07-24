@@ -21,7 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.LocalMusicActivity"/>
-        <service android:name=".service.PlayerControlService"/>
+        <service android:name=".service.PlayerControlService" />
+
     </application>
 
 </manifest>

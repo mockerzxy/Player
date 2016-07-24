@@ -1,6 +1,7 @@
 package com.example.xueyuanzhang.player.ui.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 
 import com.example.xueyuanzhang.player.R;
 import com.example.xueyuanzhang.player.model.Songs;
+import com.example.xueyuanzhang.player.service.PlayerControlService;
 import com.example.xueyuanzhang.player.ui.adapter.OverallViewPagerAdapter;
 import com.example.xueyuanzhang.player.ui.fragment.MusicFragment;
 import com.example.xueyuanzhang.player.ui.fragment.RecordFragment;
@@ -49,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_main);
         initView();
+        Intent intent = new Intent(this, PlayerControlService.class);
+        startService(intent);
 
     }
 

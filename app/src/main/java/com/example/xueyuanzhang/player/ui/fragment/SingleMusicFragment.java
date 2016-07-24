@@ -1,6 +1,9 @@
 package com.example.xueyuanzhang.player.ui.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.xueyuanzhang.player.R;
+import com.example.xueyuanzhang.player.model.BroadcastAuthorInfo;
 import com.example.xueyuanzhang.player.model.Songs;
 import com.example.xueyuanzhang.player.service.PlayerControlService;
 import com.example.xueyuanzhang.player.ui.adapter.SingleMusicListAdapter;
@@ -30,12 +34,15 @@ public class SingleMusicFragment extends Fragment{
     RecyclerView recyclerView;
     private ArrayList<Songs> songList;
     private SingleMusicListAdapter listAdapter;
+    private ActivityReceiver activityReceiver;
+    private int status;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(getArguments()!=null) {
             songList = (ArrayList<Songs>) getArguments().getSerializable("SONG_LIST");
         }
+        registerBroadcast();
     }
 
     @Nullable
@@ -53,8 +60,28 @@ public class SingleMusicFragment extends Fragment{
         listAdapter.setOnPlayBarClickListener(new SingleMusicListAdapter.OnPlayBarClickListener() {
             @Override
             public void onPlay(int position) {
-//                Intent intent = new Intent(getActivity(), PlayerControlService.class);
-//                getActivity().startService(intent);
+                int convertStatus=0;
+                switch (status){
+                    case 0:
+                        convertStatus = 0;
+                        break;
+                    case 1:
+                        convertStatus = 1;
+                        break;
+                    case 2:
+                        convertStatus = 2;
+                        break;
+                }
+
+                ArrayList<String> songPathList = new ArrayList<>();
+                for(Songs songs:songList){
+                    songPathList.add(songs.getPath());
+                }
+                Intent intent = new Intent(BroadcastAuthorInfo.PLAY_CONTROL);
+                intent.putStringArrayListExtra("SONG_LIST",songPathList);
+                intent.putExtra("POSITION",position);
+                intent.putExtra("STATUS",convertStatus);
+                getActivity().sendBroadcast(intent);
                 Toast.makeText(getActivity(), String.valueOf(position), Toast.LENGTH_SHORT).show();
             }
         });
@@ -66,5 +93,23 @@ public class SingleMusicFragment extends Fragment{
 
     }
 
+    private void registerBroadcast(){
+        activityReceiver = new ActivityReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BroadcastAuthorInfo.STATUS_FEED_BACK);
+        getActivity().registerReceiver(activityReceiver,filter);
+    }
 
+    public class ActivityReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            status = intent.getIntExtra("STATUS",-2);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(activityReceiver);
+    }
 }
